@@ -27,22 +27,22 @@ cmake_minimum_required(VERSION 3.13)
 # "C:\FreeRTOS-LTS\FreeRTOS\FreeRTOS-Kernel\portable\ThirdParty\GCC\RP2040\FreeRTOS_Kernel_import.cmake"
 include($ENV{FREERTOS_KERNEL_PATH}/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.cmake)
 
-project(blink C CXX ASM)
+project(mutex C CXX ASM)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 
 pico_sdk_init()
 
 
-add_executable(blink
-    blink.c
+add_executable(mutex
+    mutex.c
 )
 
-target_include_directories(blink PRIVATE ${CMAKE_CURRENT_LIST_DIR})    
+target_include_directories(mutex PRIVATE ${CMAKE_CURRENT_LIST_DIR})    
 
-target_link_libraries(blink pico_stdlib FreeRTOS-Kernel FreeRTOS-Kernel-Heap4) 
+target_link_libraries(mutex pico_stdlib FreeRTOS-Kernel FreeRTOS-Kernel-Heap4) 
 
-pico_enable_stdio_uart(blink 0)
-pico_enable_stdio_usb(blink 1)
+pico_enable_stdio_uart(mutex 0)
+pico_enable_stdio_usb(mutex 1)
 
-pico_add_extra_outputs(blink)
+pico_add_extra_outputs(mutex)

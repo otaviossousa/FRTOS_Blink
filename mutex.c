@@ -6,8 +6,6 @@
 #include <stdio.h>
 #include "semphr.h"
 
-const uint LED_PIN_RED = 13;
-const uint LED_PIN_BLUE = 12;
 
 SemaphoreHandle_t xMutex;
 int sharedCounter = 0;
