@@ -1,43 +1,64 @@
-// Branch: multitasking 
+// Branch: mutex 
 
 #include "pico/stdlib.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include <stdio.h>
-
+#include "semphr.h"
 
 const uint LED_PIN_RED = 13;
 const uint LED_PIN_BLUE = 12;
 
-void setup()
-{
-    gpio_init(LED_PIN_RED);
-    gpio_set_dir(LED_PIN_RED, GPIO_OUT);
-    gpio_init(LED_PIN_BLUE);
-    gpio_set_dir(LED_PIN_BLUE, GPIO_OUT);
-}
+SemaphoreHandle_t xMutex;
+int sharedCounter = 0;
 
-void vBlinkTask(void *pvParameters)
+void vTask1(void *pvParameters)
 {
-    uint *LED = (uint *)pvParameters;
-    
     for (;;)
     {
-        gpio_put(*LED, 1);
-        vTaskDelay(250 / portTICK_PERIOD_MS);
-        gpio_put(*LED, 0);
-        vTaskDelay(250 / portTICK_PERIOD_MS);
+        // protege região critica
+        if (xSemaphoreTake(xMutex, portMAX_DELAY) == pdTRUE)
+        {
+            sharedCounter++;
+            printf("Task 1: Counter = %d\n", sharedCounter);
+            xSemaphoreGive(xMutex);
+        }
+        vTaskDelay(500 / portTICK_PERIOD_MS);
     }
 }
 
+void vTask2(void *pvParameters)
+{
+    for (;;)
+    {
+        // protege região critica
+        if (xSemaphoreTake(xMutex, portMAX_DELAY) == pdTRUE)
+        {
+            sharedCounter++;
+            printf("Task 2: Counter = %d\n", sharedCounter);
+            xSemaphoreGive(xMutex);
+        }
+        vTaskDelay(700 / portTICK_PERIOD_MS);
+    }
+}
+
+
 int main() 
  {
-    setup();
+    stdio_init_all();
+    xMutex = xSemaphoreCreateMutex();
+
+    if (xMutex != NULL)
+    {
+        xTaskCreate(vTask1, "Task 1", 256, NULL, 1, NULL);
+        xTaskCreate(vTask2, "Task 2", 256, NULL, 1, NULL);
+        vTaskStartScheduler();
+    }
     
-    xTaskCreate(vBlinkTask, "Blink Task 1", 128, (void *)&LED_PIN_RED, 1, NULL);
-    xTaskCreate(vBlinkTask, "Blink Task 2", 128, (void *)&LED_PIN_BLUE, 1, NULL);
-    
-    vTaskStartScheduler();
-    for (;;)
+    while (1)
+    {
         ;
+    }
+    
+    return 0;
 }
