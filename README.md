@@ -44,3 +44,45 @@ Este repositório contém exemplos de uso do FreeRTOS na placa BitDogLab (Raspbe
 - **Conceito:** Mostra como proteger recursos compartilhados entre tarefas usando mutexes no FreeRTOS.
 - **Arquivo:** [`mutex.c`](https://github.com/otaviossousa/FRTOS_Blink/blob/mutex/mutex.c)
 - **Branch:** [mutex](https://github.com/otaviossousa/FRTOS_Blink/tree/mutex)
+
+## Como Clonar e Trocar de Branches
+
+Para facilitar o uso deste repositório, siga os passos abaixo:
+
+1. **Clonar o repositório:**
+   ```bash
+   git clone https://github.com/otaviossousa/FreeRTOS-Examples.git
+   ```
+2. Trocar para a branch desejada:
+- Para o exemplo Blink:
+  ```bash
+  git checkout blink
+  ```
+- Para o exemplo Multitasking:
+    ```bash
+    git checkout multitasking
+    ```
+
+- Para o exemplo Queue:
+    ```bash
+    git checkout queue
+    ```
+
+- Para o exemplo Semáforo:
+    ```bash
+    git checkout semaforo
+    ```
+
+- Para o exemplo Mutex:
+    ```bash
+    git checkout mutex
+    ```
+- Para voltar para a branch principal (main):
+    ```bash
+    git checkout main
+    ```
+
+- Para listar todas as branches disponíveis:
+    ```bash
+    git branch
+    ```
